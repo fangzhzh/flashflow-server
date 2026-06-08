@@ -6,7 +6,27 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : 'http://localhost:3000',
+    origin: (origin, callback) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      const allowedOrigins = process.env.FRONTEND_URL
+        ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
+        : [];
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^http:\/\/localhost:\d+$/.test(origin) ||
+        /^https?:\/\/.*\.idx-dev\.googleusercontent\.com$/.test(origin) ||
+        /^https?:\/\/.*\.vercel\.app$/.test(origin);
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        console.warn(`CORS: Origin ${origin} allowed but not explicitly in list`);
+        callback(null, true);
+      }
+    },
     credentials: true,
   });
 
