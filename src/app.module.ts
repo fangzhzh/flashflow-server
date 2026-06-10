@@ -8,6 +8,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { OverviewsModule } from './overviews/overviews.module';
 import { PomodoroModule } from './pomodoro/pomodoro.module';
 import { AiModule } from './ai/ai.module';
+import { ConcurrencyModule } from './concurrency/concurrency.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -24,6 +25,7 @@ import configuration from './config/configuration';
     OverviewsModule,
     PomodoroModule,
     AiModule,
+    ConcurrencyModule,
   ],
 })
 export class AppModule {}
