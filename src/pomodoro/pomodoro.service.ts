@@ -4,19 +4,15 @@ import { UpdatePomodoroDto } from './dto/update-pomodoro.dto';
 import { Timestamp } from 'firebase-admin/firestore';
 
 const DEFAULT_POMODORO_STATE = {
-  mode: 'work',
-  timeLeft: 25 * 60,
-  isRunning: false,
-  workDuration: 25 * 60,
-  breakDuration: 5 * 60,
-  longBreakDuration: 15 * 60,
-  sessionsBeforeLongBreak: 4,
-  completedSessions: 0,
-  currentTaskId: null,
+  status: 'idle',
+  targetEndTime: null,
+  pausedTimeLeftSeconds: null,
+  currentSessionInitialDurationMinutes: 25,
+  userPreferredDurationMinutes: 25,
+  userPreferredRestDurationMinutes: 5,
+  restTargetEndTime: null,
+  notes: '',
   currentTaskTitle: null,
-  sessionLog: [],
-  startedAt: null,
-  pausedAt: null,
 };
 
 @Injectable()

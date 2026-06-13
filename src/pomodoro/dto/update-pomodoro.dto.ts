@@ -1,55 +1,40 @@
-import { IsOptional, IsString, IsNumber, IsBoolean, IsArray } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsIn } from 'class-validator';
 
 export class UpdatePomodoroDto {
   @IsOptional()
   @IsString()
-  mode?: string;
+  @IsIn(['running', 'paused', 'idle'])
+  status?: 'running' | 'paused' | 'idle';
 
   @IsOptional()
   @IsNumber()
-  timeLeft?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isRunning?: boolean;
+  targetEndTime?: number | null;
 
   @IsOptional()
   @IsNumber()
-  workDuration?: number;
+  pausedTimeLeftSeconds?: number | null;
 
   @IsOptional()
   @IsNumber()
-  breakDuration?: number;
+  currentSessionInitialDurationMinutes?: number;
 
   @IsOptional()
   @IsNumber()
-  longBreakDuration?: number;
+  userPreferredDurationMinutes?: number;
 
   @IsOptional()
   @IsNumber()
-  sessionsBeforeLongBreak?: number;
+  userPreferredRestDurationMinutes?: number;
 
   @IsOptional()
   @IsNumber()
-  completedSessions?: number;
+  restTargetEndTime?: number | null;
 
   @IsOptional()
   @IsString()
-  currentTaskId?: string;
+  notes?: string;
 
   @IsOptional()
   @IsString()
-  currentTaskTitle?: string;
-
-  @IsOptional()
-  @IsArray()
-  sessionLog?: any[];
-
-  @IsOptional()
-  @IsNumber()
-  startedAt?: number;
-
-  @IsOptional()
-  @IsNumber()
-  pausedAt?: number;
+  currentTaskTitle?: string | null;
 }
