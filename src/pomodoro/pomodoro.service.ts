@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
 import { UpdatePomodoroDto } from './dto/update-pomodoro.dto';
-import { Timestamp } from 'firebase-admin/firestore';
+import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 
 const DEFAULT_POMODORO_STATE = {
   status: 'idle',
@@ -49,15 +49,21 @@ export class PomodoroService {
 
   async updateState(uid: string, dto: UpdatePomodoroDto) {
     const doc = await this.docRef(uid).get();
+    const updateData = {
+      ...dto,
+      updatedAt: FieldValue.serverTimestamp(),
+    };
 
     if (!doc.exists) {
       // Create with defaults merged with provided data
-      const data = { ...DEFAULT_POMODORO_STATE, ...dto };
+      const data = { ...DEFAULT_POMODORO_STATE, ...updateData };
       await this.docRef(uid).set(data);
-      return data;
+      
+      const created = await this.docRef(uid).get();
+      return this.formatData(created.data()!);
     }
 
-    await this.docRef(uid).set(dto, { merge: true });
+    await this.docRef(uid).set(updateData, { merge: true });
 
     const updated = await this.docRef(uid).get();
     return this.formatData(updated.data()!);
